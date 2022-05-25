@@ -33,10 +33,10 @@ public class TextController {
 			@RequestMapping(value = "/text", produces = { "application/json;charset=utf-8" }, consumes = {
 				"application/json;charset=utf-8" }, method = RequestMethod.POST)
 	
-			public ResponseEntity<String> publishText(@ApiParam(value = "The text to be published.", required = true)
+			public ResponseEntity<String> publishText(@ApiParam( value = "The text to be published.", required = true )
 				@RequestBody String text ) {
-				log.info( "Will publish a text using mqtt.");
-				String answer = textService.publishText(text);
-				return new ResponseEntity<String>( answer, HttpStatus.OK);
+				log.info( "Will publish a text using mqtt." );
+				String answer = textService.publishText( text );
+				return new ResponseEntity<String>( answer, HttpStatus.OK );
 			}
 }

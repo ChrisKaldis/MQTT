@@ -67,16 +67,38 @@ public class MyMqttPublisher implements MqttCallback {
 	
 	/**
 	 * 
+	 * Publishes a text.
+	 * @param text 
 	 * 
 	 */
 	public void runClient( String text ) {
 		
+		String clientID = setUpMqttClient();
+		
+		MqttClient myClient = setUpConnection(clientID);
+		
+		MqttTopic topic = defineTopic(myClient);
+
+		MqttMessage message = defineMessage(text);
+		
+		publish(topic, text, message);
+
+		disconnectClient(myClient);
+		
+		return ;
+	}
+	
+	private String setUpMqttClient() {
 		// setup MQTT Client
 		String clientID = M2MIO_THING;
 		connOpt = new MqttConnectOptions();
 		connOpt.setCleanSession(true);
 		connOpt.setKeepAliveInterval(30);
 		
+		return clientID;
+	}
+	
+	private MqttClient setUpConnection( String clientID ) {
 		try {
 			myClient = new MqttClient(BROKER_URL, clientID);
 			myClient.setCallback(this);
@@ -86,14 +108,28 @@ public class MyMqttPublisher implements MqttCallback {
 			System.exit(-1);
 		}
 		log.info("Connected to " + BROKER_URL);
+		
+		return myClient;
+	}
+	
+	private MqttTopic defineTopic( MqttClient myClient ) {
 		String myTopic = TOPIC;
 		MqttTopic topic = myClient.getTopic(myTopic);
 		
+		return topic;
+	}
+	
+	private MqttMessage defineMessage( String text ) {
 		String pubMsg = "{\"\":" + text + "}";
 		int pubQoS = 0;
 		MqttMessage message = new MqttMessage(pubMsg.getBytes());
 		message.setQos(pubQoS);
 		message.setRetained(false);
+		
+		return message;
+	}
+	
+	private void publish( MqttTopic topic, String text, MqttMessage message) {
 		// Publish the message
 		log.info("Publishing to topic \"" + topic + "\" text " + text);
 		MqttDeliveryToken token = null;
@@ -106,12 +142,17 @@ public class MyMqttPublisher implements MqttCallback {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		return ;
+	}
+	
+	private void disconnectClient( MqttClient myClient ) {
 		try {
 			myClient.disconnect();
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
+		
+		return ;
 	}
-
 }
