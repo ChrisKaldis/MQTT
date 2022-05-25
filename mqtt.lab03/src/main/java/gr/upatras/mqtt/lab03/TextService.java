@@ -11,8 +11,8 @@ public class TextService implements ITextService {
 	
 	@Override
 	public String publishText(String myText) {
-		//MyMqttPublisher mqttPublisher = new MyMqttPublisher();
-		//mqttPublisher.runClient(myText);
+		MyMqttPublisher mqttPublisher = new MyMqttPublisher();
+		mqttPublisher.runClient(myText);
 		return myText + "->has published.";
 	}
 
