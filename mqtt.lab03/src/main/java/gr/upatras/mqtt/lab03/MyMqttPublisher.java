@@ -89,29 +89,29 @@ public class MyMqttPublisher implements MqttCallback {
 		String myTopic = TOPIC;
 		MqttTopic topic = myClient.getTopic(myTopic);
 		
-			String pubMsg = "{\"\":" + text + "}";
-			int pubQoS = 0;
-			MqttMessage message = new MqttMessage(pubMsg.getBytes());
-			message.setQos(pubQoS);
-			message.setRetained(false);
-			// Publish the message
-			log.info("Publishing to topic \"" + topic + "\" text " + text);
-			MqttDeliveryToken token = null;
-			try {
-				// publish message to broker
-				token = topic.publish(message);
-				// Wait until the message has been delivered to the broker
-				token.waitForCompletion();
-				Thread.sleep(1000);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		String pubMsg = "{\"\":" + text + "}";
+		int pubQoS = 0;
+		MqttMessage message = new MqttMessage(pubMsg.getBytes());
+		message.setQos(pubQoS);
+		message.setRetained(false);
+		// Publish the message
+		log.info("Publishing to topic \"" + topic + "\" text " + text);
+		MqttDeliveryToken token = null;
+		try {
+			// publish message to broker
+			token = topic.publish(message);
+			// Wait until the message has been delivered to the broker
+			token.waitForCompletion();
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-			try {
-				myClient.disconnect();
-			} catch (MqttException e) {
-				e.printStackTrace();
-			}
+		try {
+			myClient.disconnect();
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
